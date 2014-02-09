@@ -15,6 +15,7 @@ def Create(collection, iteration):
 		           "born" : unit_born,
 			   "ttl" : unit_ttl,
 			   "die" : unit_die,
+			   "age" : int(0),
 			   "gender" : unit_gender})
 
 	print("unit " + unit_id + " was created")
