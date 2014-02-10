@@ -1,6 +1,7 @@
 import pymongo
 import time
 
+import genesis
 import create_unit
 import update_unit
 import destroy_unit
@@ -13,7 +14,9 @@ mongo_port = 27017
 mongo_db = 'population'
 mongo_collection_births = 'births_' + execution_instance
 mongo_collection_deaths = 'deaths_' + execution_instance
-mongo_collection_marrages = 'marrages_' + execution_instance
+mongo_collection_marriages = 'marriages_' + execution_instance
+
+init_pop_count = 200		# population count to generate in genesis
 
 
 def _mongo_connect(host, port):
@@ -26,6 +29,25 @@ def _mongo_connect(host, port):
 		mongo_client = 'FALSE'
 		raise SystemExit("An error occured connecting to the MongoDB Server")
 
+def _genesis(collection_births, collection_marriages, count):
+	genesis.StartPopulation(collection_births, collection_marriages, count)
+
+
+def _population(collection_births, collection_deaths, collection_marriages):
+	iteration = 0
+	while 1:
+	        iteration += 1
+	        # Create Units
+	        create_unit.Create(collection_births, iteration)
+	
+	        # Update Units
+	        update_unit.Update(collection_births, collection_marriages, iteration)
+	
+	        # Destroy Units 
+	        destroy_unit.Destroy(collection_births, collection_deaths, iteration)
+	        time.sleep(.5)
+
+
 	
 
 
@@ -36,20 +58,16 @@ if __name__ == '__main__':
 	db = client[mongo_db]
 	collection_births = db[mongo_collection_births]
 	collection_deaths = db[mongo_collection_deaths]
+	collection_marriages = db[mongo_collection_marriages]
+
 	
+	# Run genesis - create population starting point
+	_genesis(collection_births, collection_marriages, init_pop_count)
 
-iteration = 0
-while 1:
-	iteration += 1
-	# Create Units
-	create_unit.Create(collection_births, iteration)
-
-	# Update Units
-	update_unit.Update(collection_births, iteration)
-
-	# Destroy Units	
-	destroy_unit.Destroy(collection_births, collection_deaths, iteration)
-	time.sleep(.5)	
+	# Run population sim
+	_population(collection_births, collection_deaths, collection_marriages)
+	
+	
 
 
 

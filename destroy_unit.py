@@ -14,4 +14,4 @@ def Destroy(collection_births, collection_deaths, iteration):
 		# Destroy units
 		collection_births.remove({"die" : unit_die})
 
-		print("unit death may have occured - it was ment to be")
+		print("a unit has died - it was ment to be")
