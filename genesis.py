@@ -4,12 +4,12 @@ import string
 
 import unit.values
 
-def StartPopulation(collection_births, collections_marriages, count):
+def StartPopulation(collection_births, collections_matches, count):
 	# Initiate population
 	_CreateUnits(collection_births, count)
 
-	# Marry units
-	_MarryUnits(20)
+	# Match units
+	_MatchUnits(20)
 
 
 
@@ -42,5 +42,5 @@ def _CreateUnits(collection, count):
 		
 
 
-def _MarryUnits(pairs):
+def _MatchUnits(pairs):
 	print(pairs)

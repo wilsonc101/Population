@@ -4,8 +4,8 @@ def Update(collection_births, collection_marriages, iteration):
 	# Increment Age
 	_Aging(collection_births)
 
-	# Marry Units
-	_Marriage()
+	# Match Units
+	_Match()
 
 
 
@@ -14,7 +14,7 @@ def _Aging(collection_births):
         print("units have aged")
 
 
-def _Marriage():
+def _Match():
 	print("no units joined yet")
 
 

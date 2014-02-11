@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import pymongo
 import time
 
@@ -14,7 +16,7 @@ mongo_port = 27017
 mongo_db = 'population'
 mongo_collection_births = 'births_' + execution_instance
 mongo_collection_deaths = 'deaths_' + execution_instance
-mongo_collection_marriages = 'marriages_' + execution_instance
+mongo_collection_matches = 'matches_' + execution_instance
 
 init_pop_count = 200		# population count to generate in genesis
 
@@ -29,11 +31,11 @@ def _mongo_connect(host, port):
 		mongo_client = 'FALSE'
 		raise SystemExit("An error occured connecting to the MongoDB Server")
 
-def _genesis(collection_births, collection_marriages, count):
-	genesis.StartPopulation(collection_births, collection_marriages, count)
+def _genesis(collection_births, collection_matches, count):
+	genesis.StartPopulation(collection_births, collection_matches, count)
 
 
-def _population(collection_births, collection_deaths, collection_marriages):
+def _population(collection_births, collection_deaths, collection_matches):
 	iteration = 0
 	while 1:
 	        iteration += 1
@@ -41,7 +43,7 @@ def _population(collection_births, collection_deaths, collection_marriages):
 	        unit.create.Create(collection_births, iteration)
 	
 	        # Update Units
-	        unit.update.Update(collection_births, collection_marriages, iteration)
+	        unit.update.Update(collection_births, collection_matches, iteration)
 	
 	        # Destroy Units 
 	        unit.destroy.Destroy(collection_births, collection_deaths, iteration)
@@ -58,14 +60,14 @@ if __name__ == '__main__':
 	db = client[mongo_db]
 	collection_births = db[mongo_collection_births]
 	collection_deaths = db[mongo_collection_deaths]
-	collection_marriages = db[mongo_collection_marriages]
+	collection_matches = db[mongo_collection_matches]
 
 	
 	# Run genesis - create population starting point
-	_genesis(collection_births, collection_marriages, init_pop_count)
+	_genesis(collection_births, collection_matches, init_pop_count)
 
 	# Run population sim
-	_population(collection_births, collection_deaths, collection_marriages)
+	_population(collection_births, collection_deaths, collection_matches)
 	
 	
 
