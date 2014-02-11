@@ -2,9 +2,9 @@ import pymongo
 import time
 
 import genesis
-import create_unit
-import update_unit
-import destroy_unit
+import unit.create
+import unit.update
+import unit.destroy
 
 execution_instance = str(int(time.time()))
 
@@ -38,13 +38,13 @@ def _population(collection_births, collection_deaths, collection_marriages):
 	while 1:
 	        iteration += 1
 	        # Create Units
-	        create_unit.Create(collection_births, iteration)
+	        unit.create.Create(collection_births, iteration)
 	
 	        # Update Units
-	        update_unit.Update(collection_births, collection_marriages, iteration)
+	        unit.update.Update(collection_births, collection_marriages, iteration)
 	
 	        # Destroy Units 
-	        destroy_unit.Destroy(collection_births, collection_deaths, iteration)
+	        unit.destroy.Destroy(collection_births, collection_deaths, iteration)
 	        time.sleep(.5)
 
 

@@ -2,7 +2,7 @@ import pymongo
 import random
 import string
 
-import unit_values
+import unit.values
 
 def StartPopulation(collection_births, collections_marriages, count):
 	# Initiate population
@@ -21,13 +21,13 @@ def _CreateUnits(collection, count):
 		counter += 1
 
 	        # Calculate unit properties
-        	unit_firstname = unit_values.FirstName()
-        	unit_familyname = unit_values.FamilyName()
+        	unit_firstname = unit.values.FirstName()
+        	unit_familyname = unit.values.FamilyName()
 	        unit_born = 0
-	        unit_ttl = unit_values.LifeExpectancy(aged=1)
-	        unit_die = unit_values.ArtificialDeath(unit_ttl)
+	        unit_ttl = unit.values.LifeExpectancy(aged=1)
+	        unit_die = unit.values.ArtificialDeath(unit_ttl)
 		unit_age = unit_ttl - unit_die
-	        unit_gender = unit_values.Gender()
+	        unit_gender = unit.values.Gender()
 	
 	        # Create units
 	        collection.insert({"firstname" : unit_firstname,
