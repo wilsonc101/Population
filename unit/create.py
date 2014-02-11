@@ -12,6 +12,7 @@ def Create(collection, iteration):
 	unit_ttl = unit.values.LifeExpectancy()
 	unit_die = unit_born + unit_ttl
 	unit_gender = unit.values.Gender()
+	unit_matched = 0
 
 	# Create unit
 	collection.insert({"firstname" : unit_firstname,
@@ -20,7 +21,8 @@ def Create(collection, iteration):
 			   "ttl" : unit_ttl,
 			   "die" : unit_die,
 			   "age" : int(0),
-			   "gender" : unit_gender})
-
+			   "gender" : unit_gender,
+			   "matched" : unit_matched})
+		
 	print("unit " + unit_firstname + " " + unit_familyname + " was created")
 

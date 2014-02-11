@@ -21,12 +21,8 @@ def LifeExpectancy(aged=0):
 def Gender():
         # Pick a gender at random
         picker = random.choice("mf")
-
-        if picker == "m":
-                return("male")
-        else:
-                return("female")
-
+	return(picker)
+	
 
 def FirstName():
         # Generate a fisrt name

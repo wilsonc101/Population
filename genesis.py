@@ -28,6 +28,7 @@ def _CreateUnits(collection, count):
 	        unit_die = unit.values.ArtificialDeath(unit_ttl)
 		unit_age = unit_ttl - unit_die
 	        unit_gender = unit.values.Gender()
+		unit_matched = 0
 	
 	        # Create units
 	        collection.insert({"firstname" : unit_firstname,
@@ -36,7 +37,8 @@ def _CreateUnits(collection, count):
 	                           "ttl" : unit_ttl,
 	                           "die" : unit_die,
 	                           "age" : unit_age,
-	                           "gender" : unit_gender})
+	                           "gender" : unit_gender,
+				   "matched" : unit_matched})
 	
 	        print("unit " + unit_firstname + " " + unit_familyname + " was created")
 		
