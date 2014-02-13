@@ -4,10 +4,30 @@ import string
 
 import unit.values
 
-def Create(collection, iteration):
+def Create(collection, collection_matches, iteration):
+
+	units_per_iteration = unit.values.UnitsPerIteration()
+
+	created = 0
+	while created < units_per_iteration:
+	
+	# Get matches with remaining subunits and correct gap
+
+	# loop through to max subunits per iteration
+
+		# set family name of subunit to familyname of unitA of match
+
+
+
+
+
+
+
+def _CreatUnit(collection, familyname)
 	# Calculate unit properties
 	unit_firstname = unit.values.FirstName()
 	unit_familyname = unit.values.FamilyName()
+
 	unit_born = int(iteration)
 	unit_ttl = unit.values.LifeExpectancy()
 	unit_die = unit_born + unit_ttl

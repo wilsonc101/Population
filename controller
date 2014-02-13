@@ -40,7 +40,7 @@ def _population(collection_births, collection_deaths, collection_matches):
 	while 1:
 	        iteration += 1
 	        # Create Units
-	        unit.create.Create(collection_births, iteration)
+	        unit.create.Create(collection_births, collection_matches, iteration)
 	
 	        # Update Units
 	        unit.update.Update(collection_births, collection_matches, iteration)
