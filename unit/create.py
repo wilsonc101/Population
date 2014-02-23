@@ -4,21 +4,23 @@ import string
 
 import unit.values
 
-def Create(collection, collection_matches, iteration):
+def Create(collection_births, collection_matches, iteration):
 
 	units_per_iteration = unit.values.UnitsPerIteration()
+	minimum_match_duration = unit.values.MatchFirstSubunit()
+
+	# Find matches old enough to produce subunits
+	viable_matches = collection_matches.find({"matched" : {"$lte" : iteration-minimum_match_duration})
 
 	created = 0
-	while created < units_per_iteration:
-	
-	# Get matches with remaining subunits and correct gap
+	for match in viable_matches:
+		# Check match still has subunits to create and there has been the correct duration since last subunit creation
+		if (int(match["subunits_created"]) < int(match["max_subunits"]) and
+		    int(match["subunit_gap"]) < (int(iteration)-int(match["last_subunit_created"])):
 
-	# loop through to max subunits per iteration
-
-		# set family name of subunit to familyname of unitA of match
-
-
-
+			# Create unit
+			# Update match document
+			# Increment counter
 
 
 

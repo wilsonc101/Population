@@ -53,7 +53,7 @@ def UnitsPerIteration()
 
 def MatchMinimumAge():
 	# Used in: update
-	# Generate minimum age of matches	
+	# Generate minimum age of units to match
 	match_minimum_age = 20
  	return(match_minimum_age)
 
@@ -68,6 +68,13 @@ def MatchGap():
 	# Generate age gap between matched units
         max_age_gap = 6               
 	return(int(max_age_gap/2))
+
+
+def MatchFirstSubunit()
+	# Used in: update
+	# Generate minumum age of match (iterations units have been matched) before subunits can be created
+	minimum_match_duration = 3
+	return(minimum_match_duration)
 
 
 def MatchSubUnits():
