@@ -18,7 +18,7 @@ mongo_collection_births = 'births_' + execution_instance
 mongo_collection_deaths = 'deaths_' + execution_instance
 mongo_collection_matches = 'matches_' + execution_instance
 
-init_pop_count = 200		# population count to generate in genesis
+init_pop_count = 500		# population count to generate in genesis
 
 
 def _mongo_connect(host, port):
@@ -48,11 +48,13 @@ def _population(collection_births, collection_deaths, collection_matches):
 	        # Destroy Units 
 	        unit.destroy.Destroy(collection_births, collection_deaths, iteration)
 
+
 		pop_count = collection_births.count()
 		print("the iteration is " + str(iteration) + " , the population count is " + str(pop_count))
 
 		if (pop_count == 0):
-			raise SystemExit("Your population is dead, it lasted for " + str(iteration) + " iterations.")
+			pop_deaths = collection_deaths.count()
+			raise SystemExit("Your population is dead, it lasted for " + str(iteration) + " iterations. " + str(pop_deaths) + " units passed through this land." )
 
 	        time.sleep(.1)
 		
