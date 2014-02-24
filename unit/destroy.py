@@ -8,7 +8,13 @@ def Destroy(collection_births, collection_deaths, iteration):
 		# Add units to be destroyed to the deaths collection
 		collection_deaths.insert(collection_births.find({"die" : iteration}))
 
+		# Count units before destruction
+		pre_destroy = collection_births.count()
+
 		# Destroy units
 		collection_births.remove({"die" : iteration})
 
-		print("a unit has died - it was ment to be")
+		post_destroy = collection_births.count()
+
+
+		print(str(pre_destroy - post_destroy) + " unit(s) has/have died - it was ment to be")

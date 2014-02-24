@@ -41,15 +41,28 @@ def FirstName():
         return(name)
 
 def FamilyName():
-	# Used in: genesis, create
+	# Used in: genesis
         # Generate a family name
         name = ''.join(random.sample(string.ascii_lowercase,6))
         return(name)
 
-def UnitsPerIteration()
+def UnitsPerIteration():
 	# Used in: create
-	units_per_iteration = 5
+	MIN_UNITS = 0
+	MAX_UNITS = 10
+
+	units_per_iteration = random.randint(MIN_UNITS, MAX_UNITS)
 	return(units_per_iteration)
+
+def ImportedUnitsPerIteration(pop_count):
+	# Used in: create
+	# Generate number of 'imported' units to create - immigration
+	POPULATION_PERCENTAGE = 3
+	MIN_UNITS = 0
+	MAX_UNITS = int(((pop_count/100)*POPULATION_PERCENTAGE)+1)
+
+	imported_units_per_iteration = random.randint(MIN_UNITS, MAX_UNITS)
+	return(imported_units_per_iteration)
 
 def MatchMinimumAge():
 	# Used in: update
@@ -60,34 +73,46 @@ def MatchMinimumAge():
 def MatchQty():
 	# Used in: update
 	# Generate number of matches to make per iteration	
-	matches_per_iteration = 5
+	matches_per_iteration = 10
  	return(matches_per_iteration)
 
 def MatchGap():
 	# Used in: update
 	# Generate age gap between matched units
-        max_age_gap = 6               
+        max_age_gap = 10               
 	return(int(max_age_gap/2))
 
+def MatchMaxUnitAge():
+	# Used in: update
+	# Generate the maximum age of a parent unit for subunit creation
+	max_unit_age = 45
+	return(max_unit_age)
 
-def MatchFirstSubunit()
+
+def MatchFirstSubunit():
 	# Used in: update
 	# Generate minumum age of match (iterations units have been matched) before subunits can be created
-	minimum_match_duration = 3
+	minimum_match_duration = 1
 	return(minimum_match_duration)
 
 
 def MatchSubUnits():
 	# Used in: update
 	# Generate number of subunits resulting from match
-        max_subunits = 2                
+	MIN_SUBUNITS = 0
+	MAX_SUBUNITS = 6
+
+        max_subunits = random.randint(MIN_SUBUNITS, MAX_SUBUNITS)                
 	return(max_subunits)
 
 
 def MatchSubUnitGap():
 	# Used in: update
-	# Generate gap between sub unit creation
-        subunit_gap = 2
+	# Generate gap between sub unit creation - on match creation and subunit creation
+	MIN_GAP = 1
+	MAX_GAP = 10
+
+        subunit_gap = random.randint(MIN_GAP, MAX_GAP)
 	return(subunit_gap)
 
 

@@ -14,7 +14,6 @@ def Update(collection_births, collection_matches, iteration):
 def _Aging(collection):
 	# Age all units by 1 iteration
         collection.update({},{"$inc":{"age":1}}, upsert=False, multi=True)
-        print("units have aged")
 
 
 def _Match(collection_births, collection_matches, iteration):
@@ -63,7 +62,8 @@ def _Match(collection_births, collection_matches, iteration):
 						   "subunits_created" : 0,
 						   "last_subunit_created" : 0})
 
-	print(str(matched) + " units matched")
+	if (matched > 0):
+		print(str(matched) + " units matched - good for them")
 	
 					
 

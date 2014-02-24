@@ -47,10 +47,16 @@ def _population(collection_births, collection_deaths, collection_matches):
 	
 	        # Destroy Units 
 	        unit.destroy.Destroy(collection_births, collection_deaths, iteration)
-	        time.sleep(.5)
 
+		pop_count = collection_births.count()
+		print("the iteration is " + str(iteration) + " , the population count is " + str(pop_count))
 
-	
+		if (pop_count == 0):
+			raise SystemExit("Your population is dead, it lasted for " + str(iteration) + " iterations.")
+
+	        time.sleep(.1)
+		
+
 
 
 if __name__ == '__main__':
