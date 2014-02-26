@@ -46,35 +46,43 @@ def FamilyName():
         name = ''.join(random.sample(string.ascii_lowercase,6))
         return(name)
 
-def UnitsPerIteration():
+def UnitsPerIteration(pop_count):
+	##### KEY METRIC #####
 	# Used in: create
-	MIN_UNITS = 0
-	MAX_UNITS = 10
+        POPULATION_PERCENTAGE = 7
+        MIN_UNITS = 0
+        MAX_UNITS = int(((pop_count/100)*POPULATION_PERCENTAGE)+1)
 
 	units_per_iteration = random.randint(MIN_UNITS, MAX_UNITS)
 	return(units_per_iteration)
 
 def ImportedUnitsPerIteration(pop_count):
+	##### KEY METRIC #####
 	# Used in: create
 	# Generate number of 'imported' units to create - immigration
-	POPULATION_PERCENTAGE = 3
+	POPULATION_PERCENTAGE = 1
 	MIN_UNITS = 0
 	MAX_UNITS = int(((pop_count/100)*POPULATION_PERCENTAGE)+1)
 
 	imported_units_per_iteration = random.randint(MIN_UNITS, MAX_UNITS)
 	return(imported_units_per_iteration)
 
+def MatchQty(pop_count):
+	##### KEY METRIC #####
+	# Used in: update
+	# Generate number of matches to make per iteration	
+        POPULATION_PERCENTAGE = 5
+        MIN_MATCHES = 0
+        MAX_MATCHES = int(((pop_count/100)*POPULATION_PERCENTAGE)+1)
+
+	matches_per_iteration = random.randint(MIN_MATCHES, MAX_MATCHES)
+ 	return(matches_per_iteration)
+
 def MatchMinimumAge():
 	# Used in: update
 	# Generate minimum age of units to match
 	match_minimum_age = 20
  	return(match_minimum_age)
-
-def MatchQty():
-	# Used in: update
-	# Generate number of matches to make per iteration	
-	matches_per_iteration = 10
- 	return(matches_per_iteration)
 
 def MatchGap():
 	# Used in: update

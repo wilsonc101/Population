@@ -7,6 +7,7 @@ import genesis
 import unit.create
 import unit.update
 import unit.destroy
+import census.collect
 
 execution_instance = str(int(time.time()))
 
@@ -17,6 +18,8 @@ mongo_db = 'population'
 mongo_collection_births = 'births_' + execution_instance
 mongo_collection_deaths = 'deaths_' + execution_instance
 mongo_collection_matches = 'matches_' + execution_instance
+mongo_collection_census = 'census_' + execution_instance
+
 
 init_pop_count = 500		# population count to generate in genesis
 
@@ -35,7 +38,7 @@ def _genesis(collection_births, collection_matches, count):
 	genesis.StartPopulation(collection_births, collection_matches, count)
 
 
-def _population(collection_births, collection_deaths, collection_matches):
+def _population(collection_births, collection_deaths, collection_matches, collection_census):
 	iteration = 0
 	while 1:
 	        iteration += 1
@@ -48,6 +51,8 @@ def _population(collection_births, collection_deaths, collection_matches):
 	        # Destroy Units 
 	        unit.destroy.Destroy(collection_births, collection_deaths, iteration)
 
+		# Take Census
+		census.collect.Collect(collection_census, collection_births, collection_deaths, collection_matches, iteration)
 
 		pop_count = collection_births.count()
 		print("the iteration is " + str(iteration) + " , the population count is " + str(pop_count))
@@ -69,13 +74,14 @@ if __name__ == '__main__':
 	collection_births = db[mongo_collection_births]
 	collection_deaths = db[mongo_collection_deaths]
 	collection_matches = db[mongo_collection_matches]
+	collection_census = db[mongo_collection_census]
 
 	
 	# Run genesis - create population starting point
 	_genesis(collection_births, collection_matches, init_pop_count)
 
 	# Run population sim
-	_population(collection_births, collection_deaths, collection_matches)
+	_population(collection_births, collection_deaths, collection_matches, collection_census)
 	
 	
 

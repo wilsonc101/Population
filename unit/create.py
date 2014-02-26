@@ -1,14 +1,14 @@
 import pymongo
 import random
-import string
 
 import unit.values
 
 
 def Create(collection_births, collection_matches, iteration):
+	population_count = collection_births.count()
 
-	imported_units_per_iteration = int(unit.values.ImportedUnitsPerIteration(collection_births.count()))
-	units_per_iteration = int(unit.values.UnitsPerIteration())
+	imported_units_per_iteration = int(unit.values.ImportedUnitsPerIteration(population_count))
+	units_per_iteration = int(unit.values.UnitsPerIteration(population_count))
 	minimum_match_duration = int(unit.values.MatchFirstSubunit())
 	unit_max_age = int(unit.values.MatchMaxUnitAge())
 	new_subunit_gap = int(unit.values.MatchSubUnitGap())
@@ -65,6 +65,7 @@ def _CreateUnit(collection, familyname, iteration, imported=0):
 		unit_age = 0
 		unit_gender = unit.values.Gender()
 		unit_matched = 0
+		unit_imported = imported
 
 	else:
 		# Calculate unit properties for imported unit
@@ -76,6 +77,7 @@ def _CreateUnit(collection, familyname, iteration, imported=0):
                 unit_age = unit_die - unit_born
                 unit_gender = unit.values.Gender()
                 unit_matched = 0
+		unit_imported = imported
 
 
 
@@ -87,7 +89,8 @@ def _CreateUnit(collection, familyname, iteration, imported=0):
 			   "die" : unit_die,
 			   "age" : unit_age,
 			   "gender" : unit_gender,
-			   "matched" : unit_matched})
+			   "matched" : unit_matched,
+			   "imported" : unit_imported})
 		
 	if (imported == 0):
 		print("unit " + unit_firstname + " " + unit_familyname + " was created - time to celebrate")
