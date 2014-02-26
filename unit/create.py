@@ -43,14 +43,21 @@ def Create(collection_births, collection_matches, iteration):
 				# Increment counter
 				subunits_created += 1
 
+	
 	## Generate 'imported' units - immigration
 	# Only import units to healthy population - (> 10) - allow population to die
+	imported_units_created = 0
 	if (collection_births.count() > 10):
-		imported_units_created = 0
 		while (imported_units_created < imported_units_per_iteration):
 			_CreateUnit(collection_births, "n_a", iteration, 1)
 			imported_units_created += 1
 
+
+	if (subunits_created > 0):
+		print (str(subunits_created) + " subunits created")
+	
+	if (imported_units_created > 0):
+		print (str(imported_units_created) + " units imported")
 
 
 def _CreateUnit(collection, familyname, iteration, imported=0):
@@ -92,8 +99,8 @@ def _CreateUnit(collection, familyname, iteration, imported=0):
 			   "matched" : unit_matched,
 			   "imported" : unit_imported})
 		
-	if (imported == 0):
-		print("unit " + unit_firstname + " " + unit_familyname + " was created - time to celebrate")
-	else:
-		print("unit " + unit_firstname + " " + unit_familyname + " moved in - make yourself at home")
+#	if (imported == 0):
+#		print("unit " + unit_firstname + " " + unit_familyname + " was created - time to celebrate")
+#	else:
+#		print("unit " + unit_firstname + " " + unit_familyname + " moved in - make yourself at home")
 		

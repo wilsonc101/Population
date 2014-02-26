@@ -71,9 +71,10 @@ def MatchQty(pop_count):
 	##### KEY METRIC #####
 	# Used in: update
 	# Generate number of matches to make per iteration	
-        POPULATION_PERCENTAGE = 5
-        MIN_MATCHES = 0
-        MAX_MATCHES = int(((pop_count/100)*POPULATION_PERCENTAGE)+1)
+        MIN_POPULATION_PERCENTAGE = 40
+        MAX_POPULATION_PERCENTAGE = 50
+        MIN_MATCHES = int(((pop_count/100)*MIN_POPULATION_PERCENTAGE))
+        MAX_MATCHES = int(((pop_count/100)*MAX_POPULATION_PERCENTAGE))
 
 	matches_per_iteration = random.randint(MIN_MATCHES, MAX_MATCHES)
  	return(matches_per_iteration)
@@ -87,7 +88,7 @@ def MatchMinimumAge():
 def MatchGap():
 	# Used in: update
 	# Generate age gap between matched units
-        max_age_gap = 10               
+        max_age_gap = 12              
 	return(int(max_age_gap/2))
 
 def MatchMaxUnitAge():
