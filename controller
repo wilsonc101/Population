@@ -2,6 +2,7 @@
 
 import pymongo
 import time
+import multiprocessing
 
 import genesis
 import unit.create
@@ -43,13 +44,17 @@ def _population(collection_births, collection_deaths, collection_matches, collec
 	while 1:
 	        iteration += 1
 	        # Create Units
-	        unit.create.Create(collection_births, collection_matches, iteration)
+		create_worker = multiprocessing.Process(name='create_worker', target=unit.create.Create(collection_births, collection_matches, iteration))
 	
 	        # Update Units
-	        unit.update.Update(collection_births, collection_matches, iteration)
+		update_worker = multiprocessing.Process(name='update_worker', target=unit.update.Update(collection_births, collection_matches, iteration))
 	
 	        # Destroy Units 
-	        unit.destroy.Destroy(collection_births, collection_deaths, iteration)
+		destroy_worker = multiprocessing.Process(name='destroy_worker', target=unit.destroy.Destroy(collection_births, collection_deaths, iteration))
+
+		create_worker.start()
+		update_worker.start()
+		destroy_worker.start()
 
 		# Take Census
 		census.collect.Collect(collection_census, collection_births, collection_deaths, collection_matches, iteration)

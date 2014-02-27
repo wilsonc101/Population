@@ -1,13 +1,17 @@
 import pymongo
+import multiprocessing
 
 import unit.values
 
 def Update(collection_births, collection_matches, iteration):
 	# Increment Age
-	_Aging(collection_births)
+	increment_worker = multiprocessing.Process(name='increment_worker', target=_Aging(collection_births))
 
 	# Match Units
-	_Match(collection_births, collection_matches, iteration)
+	match_worker = multiprocessing.Process(name='match_worker', target=_Match(collection_births, collection_matches, iteration))
+
+	increment_worker.start()
+	match_worker.start()
 
 
 
