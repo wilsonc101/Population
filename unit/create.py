@@ -29,9 +29,6 @@ def Create(collection_births, collection_matches, iteration):
 		            match["unitA"]["age"] < unit_max_age and 
 			    match["unitB"]["age"] < unit_max_age):
 	
-				# Create unit
-				_CreateUnit(collection_births, match["unitA"]["familyname"], iteration)
-	
 				# Update match document:
 				# - Set subunit created interation 'date'
 				# - Increment subunits created
@@ -40,6 +37,16 @@ def Create(collection_births, collection_matches, iteration):
 										  "$inc":{"subunits_created" : 1},
 										  "$set":{"subunit_gap" : new_subunit_gap}},
 										  upsert=False, multi=True)
+
+				# Inherited properties
+				subunit_familyname = match["unitA"]["familyname"]
+				subunit_generation = int(match["unitA"]["generation"])+1
+				
+				# Create unit
+				_CreateUnit(collection_births, subunit_familyname, iteration, 0, subunit_generation)
+	
+
+
 				# Increment counter
 				subunits_created += 1
 
@@ -60,31 +67,31 @@ def Create(collection_births, collection_matches, iteration):
 		print (str(imported_units_created) + " units imported")
 
 
-def _CreateUnit(collection, familyname, iteration, imported=0):
+def _CreateUnit(collection, familyname, iteration, imported=0, generation=0):
+
+	# Common unit properties
+        unit_firstname = unit.values.FirstName()
+	unit_born = int(iteration)
+	unit_matched = 0
+	unit_imported = imported
+	unit_generation = generation
+
 
 	if (imported == 0):
 		# Calculate unit properties for subunit
-		unit_firstname = unit.values.FirstName()
 		unit_familyname = familyname
-		unit_born = int(iteration)
 		unit_ttl = unit.values.LifeExpectancy()
 		unit_die = unit_born + unit_ttl
 		unit_age = 0
 		unit_gender = unit.values.Gender()
-		unit_matched = 0
-		unit_imported = imported
 
 	else:
 		# Calculate unit properties for imported unit
-                unit_firstname = unit.values.FirstName()
                 unit_familyname = unit.values.FamilyName()
-                unit_born = iteration
                 unit_ttl = unit.values.LifeExpectancy(aged=1)
                 unit_die = unit.values.ArtificialDeath(unit_ttl)+unit_born
                 unit_age = unit_die - unit_born
                 unit_gender = unit.values.Gender()
-                unit_matched = 0
-		unit_imported = imported
 
 
 
@@ -97,7 +104,8 @@ def _CreateUnit(collection, familyname, iteration, imported=0):
 			   "age" : unit_age,
 			   "gender" : unit_gender,
 			   "matched" : unit_matched,
-			   "imported" : unit_imported})
+			   "imported" : unit_imported,
+			   "generation" : unit_generation})
 		
 #	if (imported == 0):
 #		print("unit " + unit_firstname + " " + unit_familyname + " was created - time to celebrate")

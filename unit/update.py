@@ -64,7 +64,7 @@ def _Match(collection_births, collection_matches, iteration):
 						   "last_subunit_created" : 0})
 
 	if (matched > 0):
-		print(str(matched) + " units matched - good for them")
+		print(str(matched) + " unit matches created")
 	
 					
 

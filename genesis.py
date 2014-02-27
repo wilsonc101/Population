@@ -30,6 +30,7 @@ def _CreateUnits(collection, count):
 	        unit_gender = unit.values.Gender()
 		unit_matched = 0
 		unit_imported = 1
+		unit_generation = 0
 	
 	        # Create units
 	        collection.insert({"firstname" : unit_firstname,
@@ -40,7 +41,8 @@ def _CreateUnits(collection, count):
 	                           "age" : unit_age,
 	                           "gender" : unit_gender,
 				   "matched" : unit_matched,
-				   "imported" : unit_imported})
+				   "imported" : unit_imported,
+				   "generation" : unit_generation})
 	
 	        print("unit " + unit_firstname + " " + unit_familyname + " was created")
 		

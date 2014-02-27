@@ -61,7 +61,7 @@ def _population(collection_births, collection_deaths, collection_matches, collec
 			pop_deaths = collection_deaths.count()
 			raise SystemExit("Your population is dead, it lasted for " + str(iteration) + " iterations. " + str(pop_deaths) + " units passed through this land." )
 
-	        time.sleep(.1)
+#	        time.sleep(.1)
 		
 
 

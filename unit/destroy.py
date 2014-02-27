@@ -17,4 +17,4 @@ def Destroy(collection_births, collection_deaths, iteration):
 		post_destroy = collection_births.count()
 
 
-		print(str(pre_destroy - post_destroy) + " unit(s) has/have died - it was ment to be")
+		print(str(pre_destroy - post_destroy) + " unit(s) has/have destroyed")

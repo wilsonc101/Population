@@ -49,9 +49,10 @@ def FamilyName():
 def UnitsPerIteration(pop_count):
 	##### KEY METRIC #####
 	# Used in: create
-        POPULATION_PERCENTAGE = 7
-        MIN_UNITS = 0
-        MAX_UNITS = int(((pop_count/100)*POPULATION_PERCENTAGE)+1)
+        MIN_POPULATION_PERCENTAGE = 2 
+        MAX_POPULATION_PERCENTAGE = 4 
+        MIN_UNITS = int(((pop_count/100)*MIN_POPULATION_PERCENTAGE))
+        MAX_UNITS = int(((pop_count/100)*MAX_POPULATION_PERCENTAGE))
 
 	units_per_iteration = random.randint(MIN_UNITS, MAX_UNITS)
 	return(units_per_iteration)
@@ -60,9 +61,10 @@ def ImportedUnitsPerIteration(pop_count):
 	##### KEY METRIC #####
 	# Used in: create
 	# Generate number of 'imported' units to create - immigration
-	POPULATION_PERCENTAGE = 1
-	MIN_UNITS = 0
-	MAX_UNITS = int(((pop_count/100)*POPULATION_PERCENTAGE)+1)
+        MIN_POPULATION_PERCENTAGE = 3 
+        MAX_POPULATION_PERCENTAGE = 4 
+        MIN_UNITS = int(((pop_count/100)*MIN_POPULATION_PERCENTAGE))
+        MAX_UNITS = int(((pop_count/100)*MAX_POPULATION_PERCENTAGE))
 
 	imported_units_per_iteration = random.randint(MIN_UNITS, MAX_UNITS)
 	return(imported_units_per_iteration)
