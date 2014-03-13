@@ -40,8 +40,20 @@ def _genesis(collection_births, collection_matches, count):
 
 
 def _population(collection_births, collection_deaths, collection_matches, collection_census):
+
+
+
 	iteration = 0
 	while 1:
+		# Initiate indexes
+		collection_births.ensure_index([("matched", pymongo.DESCENDING),
+						("age", pymongo.ASCENDING),
+						("gender", pymongo.ASCENDING)])
+	
+		collection_matches.ensure_index([("matched", pymongo.ASCENDING),
+						 ("unitA.age", pymongo.ASCENDING),
+						 ("unitB.age", pymongo.ASCENDING)])
+
 	        iteration += 1
 	        # Create Units
 		create_worker = multiprocessing.Process(name='create_worker', target=unit.create.Create(collection_births, collection_matches, iteration))
@@ -66,6 +78,10 @@ def _population(collection_births, collection_deaths, collection_matches, collec
 			pop_deaths = collection_deaths.count()
 			raise SystemExit("Your population is dead, it lasted for " + str(iteration) + " iterations. " + str(pop_deaths) + " units passed through this land." )
 
+		#Rebuild indexes
+		#collection_births.reindex()
+		#collection_matches.reindex()
+
 #	        time.sleep(.1)
 		
 
@@ -80,6 +96,7 @@ if __name__ == '__main__':
 	collection_deaths = db[mongo_collection_deaths]
 	collection_matches = db[mongo_collection_matches]
 	collection_census = db[mongo_collection_census]
+
 
 	
 	# Run genesis - create population starting point
