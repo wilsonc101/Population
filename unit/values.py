@@ -49,8 +49,8 @@ def FamilyName():
 def UnitsPerIteration(pop_count):
 	##### KEY METRIC #####
 	# Used in: create
-        MIN_POPULATION_PERCENTAGE = 2 
-        MAX_POPULATION_PERCENTAGE = 4 
+        MIN_POPULATION_PERCENTAGE = 20
+        MAX_POPULATION_PERCENTAGE = 40
         MIN_UNITS = int(((pop_count/100)*MIN_POPULATION_PERCENTAGE))
         MAX_UNITS = int(((pop_count/100)*MAX_POPULATION_PERCENTAGE))
 

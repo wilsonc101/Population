@@ -22,7 +22,7 @@ mongo_collection_matches = 'matches_' + execution_instance
 mongo_collection_census = 'census_' + execution_instance
 
 
-init_pop_count = 500		# population count to generate in genesis
+init_pop_count = 1000		# population count to generate in genesis
 
 
 def _mongo_connect(host, port):
@@ -41,18 +41,18 @@ def _genesis(collection_births, collection_matches, count):
 
 def _population(collection_births, collection_deaths, collection_matches, collection_census):
 
+	# Initiate indexes
+	collection_births.create_index([("matched", pymongo.DESCENDING),
+					("age", pymongo.ASCENDING),
+					("gender", pymongo.ASCENDING)])
+
+	collection_matches.create_index([("matched", pymongo.ASCENDING),
+					 ("unitA.age", pymongo.ASCENDING),
+					 ("unitB.age", pymongo.ASCENDING)])
 
 
 	iteration = 0
 	while 1:
-		# Initiate indexes
-		collection_births.ensure_index([("matched", pymongo.DESCENDING),
-						("age", pymongo.ASCENDING),
-						("gender", pymongo.ASCENDING)])
-	
-		collection_matches.ensure_index([("matched", pymongo.ASCENDING),
-						 ("unitA.age", pymongo.ASCENDING),
-						 ("unitB.age", pymongo.ASCENDING)])
 
 	        iteration += 1
 	        # Create Units
@@ -79,8 +79,8 @@ def _population(collection_births, collection_deaths, collection_matches, collec
 			raise SystemExit("Your population is dead, it lasted for " + str(iteration) + " iterations. " + str(pop_deaths) + " units passed through this land." )
 
 		#Rebuild indexes
-		#collection_births.reindex()
-		#collection_matches.reindex()
+		collection_births.reindex()
+		collection_matches.reindex()
 
 #	        time.sleep(.1)
 		

@@ -25,25 +25,52 @@ def Create(collection_births, collection_matches, iteration):
 
 	## Generate subunits from matches
 	# Find matches old enough to produce subunits
+
+	viable_matches = []
+	loop_protect = 0
+
+	all_matches = collection_matches.find({"matched" : {"$lte" : (iteration - minimum_match_duration)},
+		                               "unitA.age" : {"$lte" : unit_max_age},
+               		                       "unitB.age" : {"$lte" : unit_max_age}})
+
+
+	print ("!!!!!!!!!!!!1 -----------------------" + str(all_matches.count()))
 	TEST_TIMER_02 = time.clock()
-	viable_matches = collection_matches.find({"matched" : {"$lte" : (iteration - minimum_match_duration)},
-						  "unitA.age" : {"$lte" : unit_max_age},
-						  "unitB.age" : {"$lte" : unit_max_age}})
+
+	## Build list of viable matches for subunit creation
+	while len(viable_matches) < units_per_iteration:
+
+		loop_protect += 1
+		if loop_protect >= collection_matches.count(): break
+
+		if (all_matches != None):
+			for one_match in all_matches:
+				if (one_match["subunits_created"] < one_match["max_subunits"] and 
+			  	    one_match["subunit_gap"] < (iteration - one_match["last_subunit_created"])):
+				
+					viable_matches.append(one_match)
+
 
 	TEST_RESULT_02 = time.clock() - TEST_TIMER_02
 
 	TEST_TIMER_03 = time.clock()
-	subunits_created = 0
+
+	print ("viable_matches -- !!!!!!! -- " + str(len(viable_matches)))
+
 	for match in viable_matches:
-		if subunits_created < units_per_iteration:
+
 			# Check match still has subunits to create and there has been the correct duration since last subunit creation
 	   	        # Add that the parent units are young enough
 		
 
-			if (match["subunits_created"] < match["max_subunits"] and 
-			    match["subunit_gap"] < (iteration - match["last_subunit_created"]) and
-		            match["unitA"]["age"] < unit_max_age and 
-			    match["unitB"]["age"] < unit_max_age):
+
+#			if (match["subunits_created"] < match["max_subunits"] and 
+#			    match["subunit_gap"] < (iteration - match["last_subunit_created"])):
+
+#			if (match["subunits_created"] < match["max_subunits"] and 
+#			    match["subunit_gap"] < (iteration - match["last_subunit_created"]) and
+#		            match["unitA"]["age"] < unit_max_age and 
+#			    match["unitB"]["age"] < unit_max_age):
 
 	
 				# Update match document:
@@ -63,10 +90,6 @@ def Create(collection_births, collection_matches, iteration):
 				_CreateUnit(collection_births, subunit_familyname, iteration, 0, subunit_generation)
 	
 
-
-				# Increment counter
-				subunits_created += 1
-
 	TEST_RESULT_03 = time.clock() - TEST_TIMER_03
 
 	## Generate 'imported' units - immigration
@@ -85,7 +108,7 @@ def Create(collection_births, collection_matches, iteration):
 	print (">>>>  GET VALUES - " + str(TEST_RESULT_01a))
 	print (">>>>  INITIAL QUERY - " + str(TEST_RESULT_02))
 
-	if (subunits_created > 0):
+	if (viable_matches > 0):
 #		print (str(subunits_created) + " subunits created")
 		print (">>>>  CREATE TASK - " + str(TEST_RESULT_03))
 
