@@ -7,10 +7,6 @@ import unit.values
 
 
 def Create(collection_births, collection_matches, iteration):
-	TEST_TIMER_01 = time.clock()
-
-
-	TEST_TIMER_01a = time.clock()
 
 	population_count = collection_births.count()
 
@@ -20,7 +16,6 @@ def Create(collection_births, collection_matches, iteration):
 	unit_max_age = int(unit.values.MatchMaxUnitAge())
 	new_subunit_gap = int(unit.values.MatchSubUnitGap())
 
-	TEST_RESULT_01a = time.clock() - TEST_TIMER_01a
 
 
 	## Generate subunits from matches
@@ -33,9 +28,6 @@ def Create(collection_births, collection_matches, iteration):
 		                               "unitA.age" : {"$lte" : unit_max_age},
                		                       "unitB.age" : {"$lte" : unit_max_age}})
 
-
-	print ("!!!!!!!!!!!!1 -----------------------" + str(all_matches.count()))
-	TEST_TIMER_02 = time.clock()
 
 	## Build list of viable matches for subunit creation
 	while len(viable_matches) < units_per_iteration:
@@ -50,12 +42,6 @@ def Create(collection_births, collection_matches, iteration):
 				
 					viable_matches.append(one_match)
 
-
-	TEST_RESULT_02 = time.clock() - TEST_TIMER_02
-
-	TEST_TIMER_03 = time.clock()
-
-	print ("viable_matches -- !!!!!!! -- " + str(len(viable_matches)))
 
 	for match in viable_matches:
 
@@ -90,42 +76,15 @@ def Create(collection_births, collection_matches, iteration):
 				_CreateUnit(collection_births, subunit_familyname, iteration, 0, subunit_generation)
 	
 
-	TEST_RESULT_03 = time.clock() - TEST_TIMER_03
 
 	## Generate 'imported' units - immigration
 	# Only import units to healthy population - (> 10) - allow population to die
 
 	imported_units_created = 0
 	if (collection_births.count() > 10):
-		TEST_TIMER_04 = time.clock()
 		while (imported_units_created < imported_units_per_iteration):
 			_CreateUnit(collection_births, "n_a", iteration, 1)
 			imported_units_created += 1
-		TEST_RESULT_04 = time.clock() - TEST_TIMER_04
-
-
-
-	print (">>>>  GET VALUES - " + str(TEST_RESULT_01a))
-	print (">>>>  INITIAL QUERY - " + str(TEST_RESULT_02))
-
-	if (viable_matches > 0):
-#		print (str(subunits_created) + " subunits created")
-		print (">>>>  CREATE TASK - " + str(TEST_RESULT_03))
-
-	
-	if (imported_units_created > 0):
-#		print (str(imported_units_created) + " units imported")
-		print (">>>>  IMPORT TASK - " + str(TEST_RESULT_04))
-
-
-	TEST_RESULT_01 = time.clock() - TEST_TIMER_01
-
-	print (">>>>  TOTAL TASK - " + str(TEST_RESULT_01))
-
-
-
-
-	
 
 
 
