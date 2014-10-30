@@ -1,8 +1,9 @@
 #!/usr/bin/python
-
+import pika
 import pymongo
 import time
 import multiprocessing
+
 
 import genesis
 import unit.create
@@ -11,6 +12,10 @@ import unit.destroy
 import census.collect
 
 execution_instance = str(int(time.time()))
+
+broker_host = 'localhost'
+# broker_port = 5672            # default is assumed by client
+
 
 mongo_host = 'localhost'
 mongo_port = 27017
@@ -35,11 +40,26 @@ def _mongo_connect(host, port):
 		mongo_client = 'FALSE'
 		raise SystemExit("An error occured connecting to the MongoDB Server")
 
+
+
+def _broker_connect(host, port=0):
+	try: 
+		connection = pika.BlockingConnection(pika.ConnectionParameters(host))
+		channel = connection.channel()
+		channel.queue_declare(queue='create')
+		print("Connected to message broker on " + str(broker_host))
+		return(channel)
+	except:
+		return(None)
+	
+
+
+
 def _genesis(collection_births, collection_matches, count):
 	genesis.StartPopulation(collection_births, collection_matches, count)
 
 
-def _population(collection_births, collection_deaths, collection_matches, collection_census):
+def _population(collection_births, collection_deaths, collection_matches, collection_census, broker_connection):
 
 	# Initiate indexes
 	collection_births.create_index([("matched", pymongo.DESCENDING),
@@ -56,7 +76,7 @@ def _population(collection_births, collection_deaths, collection_matches, collec
 
 	        iteration += 1
 	        # Create Units
-		create_worker = multiprocessing.Process(name='create_worker', target=unit.create.Create(collection_births, collection_matches, iteration))
+		create_worker = multiprocessing.Process(name='create_worker', target=unit.create.Create(collection_births, collection_matches, iteration, broker_connection))
 	
 	        # Update Units
 		update_worker = multiprocessing.Process(name='update_worker', target=unit.update.Update(collection_births, collection_matches, iteration))
@@ -97,13 +117,14 @@ if __name__ == '__main__':
 	collection_matches = db[mongo_collection_matches]
 	collection_census = db[mongo_collection_census]
 
+	# connect to message broker (rabbitMQ)	
+	broker_connection = _broker_connect(broker_host)
 
-	
 	# Run genesis - create population starting point
 	_genesis(collection_births, collection_matches, init_pop_count)
 
 	# Run population sim
-	_population(collection_births, collection_deaths, collection_matches, collection_census)
+	_population(collection_births, collection_deaths, collection_matches, collection_census, broker_connection)
 	
 	
 

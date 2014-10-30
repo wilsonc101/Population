@@ -1,12 +1,14 @@
+
 import time
 
 import pymongo
 import random
+import pika
 
 import unit.values
 
 
-def Create(collection_births, collection_matches, iteration):
+def Create(collection_births, collection_matches, iteration, broker_connection=None):
 
 	population_count = collection_births.count()
 
@@ -48,33 +50,26 @@ def Create(collection_births, collection_matches, iteration):
 			# Check match still has subunits to create and there has been the correct duration since last subunit creation
 	   	        # Add that the parent units are young enough
 		
-
-
-#			if (match["subunits_created"] < match["max_subunits"] and 
-#			    match["subunit_gap"] < (iteration - match["last_subunit_created"])):
-
-#			if (match["subunits_created"] < match["max_subunits"] and 
-#			    match["subunit_gap"] < (iteration - match["last_subunit_created"]) and
-#		            match["unitA"]["age"] < unit_max_age and 
-#			    match["unitB"]["age"] < unit_max_age):
-
-	
 				# Update match document:
-				# - Set subunit created interation 'date'
-				# - Increment subunits created
-				# - Regenerate subunit gap (min of 1)
-				collection_matches.update({"_id" : match["_id"]},{"$set":{"last_subunit_created" : iteration},
-										  "$inc":{"subunits_created" : 1},
-										  "$set":{"subunit_gap" : new_subunit_gap}},
-										  upsert=False, multi=True)
 
-				# Inherited properties
-				subunit_familyname = match["unitA"]["familyname"]
-				subunit_generation = int(match["unitA"]["generation"])+1
-				
-				# Create unit
-				_CreateUnit(collection_births, subunit_familyname, iteration, 0, subunit_generation)
-	
+		# - Set subunit created interation 'date'
+		# - Increment subunits created
+		# - Regenerate subunit gap (min of 1)
+		collection_matches.update({"_id" : match["_id"]},{"$set":{"last_subunit_created" : iteration},
+								  "$inc":{"subunits_created" : 1},
+								  "$set":{"subunit_gap" : new_subunit_gap}},
+								  upsert=False, multi=True)
+
+		# Inherited properties
+		subunit_familyname = match["unitA"]["familyname"]
+		subunit_generation = int(match["unitA"]["generation"])+1
+		
+		# Create unit
+		if broker_connection == None:
+ 		  _CreateUnit(collection_births, subunit_familyname, iteration, 0, subunit_generation)
+		else:				
+		  message_string = str(collection_births.database.name) + "," + str(collection_births.name) + ",create," + subunit_familyname + "," + str(iteration) + "," + str(0) + "," + str(subunit_generation)
+		  broker_connection.basic_publish(exchange='',routing_key='create',body=message_string)	
 
 
 	## Generate 'imported' units - immigration
@@ -83,7 +78,13 @@ def Create(collection_births, collection_matches, iteration):
 	imported_units_created = 0
 	if (collection_births.count() > 10):
 		while (imported_units_created < imported_units_per_iteration):
-			_CreateUnit(collection_births, "n_a", iteration, 1)
+		
+			if broker_connection == None:
+			  _CreateUnit(collection_births, "n_a", iteration, 1)
+			else:
+ 			  message_string_import = str(collection_births.database.name) + "," + str(collection_births.name) + ",create," + str(iteration) + "," + str(1) + ",0,0"
+			  broker_connection.basic_publish(exchange='',routing_key='create',body=message_string_import)	
+
 			imported_units_created += 1
 
 
