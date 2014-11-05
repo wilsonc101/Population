@@ -76,7 +76,8 @@ def _population(collection_births, collection_deaths, collection_matches, collec
 
 	        iteration += 1
 	        # Create Units
-		create_worker = multiprocessing.Process(name='create_worker', target=unit.create.Create(collection_births, collection_matches, iteration, broker_connection))
+#		create_worker = multiprocessing.Process(name='create_worker', target=unit.create.Create(collection_births, collection_matches, iteration, broker_connection))
+		unit.create.Create(collection_births, collection_matches, iteration, broker_connection)
 	
 	        # Update Units
 		update_worker = multiprocessing.Process(name='update_worker', target=unit.update.Update(collection_births, collection_matches, iteration))
@@ -84,7 +85,7 @@ def _population(collection_births, collection_deaths, collection_matches, collec
 	        # Destroy Units 
 		destroy_worker = multiprocessing.Process(name='destroy_worker', target=unit.destroy.Destroy(collection_births, collection_deaths, iteration))
 
-		create_worker.start()
+	#	create_worker.start()
 		update_worker.start()
 		destroy_worker.start()
 
