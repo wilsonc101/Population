@@ -6,10 +6,10 @@ import pika
 import unit.values
 
 
-mongo_host = '10.224.36.180'
+mongo_host = '10.224.36.145'
 mongo_port = 27017
 
-broker_host = '10.224.36.180'
+broker_host = '10.224.36.145'
 queue_name = "create"
 
 def _mongo_connect(host, port):
