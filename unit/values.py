@@ -107,14 +107,19 @@ def MatchFirstSubunit():
 	return(minimum_match_duration)
 
 
-def MatchSubUnits():
-	# Used in: update
-	# Generate number of subunits resulting from match
-	MIN_SUBUNITS = 0
-	MAX_SUBUNITS = 6
+def MatchSubUnits(pop_count):
+# Used in: update
+# Generate number of subunits resulting from match
+    MIN_SUBUNITS = 0
 
-        max_subunits = random.randint(MIN_SUBUNITS, MAX_SUBUNITS)                
-	return(max_subunits)
+    # Skew subunit count based on population count (crude)
+    if pop_count < 2000:
+        MAX_SUBUNITS = 5
+    else:
+        MAX_SUBUNITS = 2
+
+    max_subunits = random.randint(MIN_SUBUNITS, MAX_SUBUNITS)                
+    return(max_subunits)
 
 
 def MatchSubUnitGap():

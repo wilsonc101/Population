@@ -29,7 +29,7 @@ def _Match(collection_births, collection_matches, iteration):
 	# Match values
 	matches_per_iteration = unit.values.MatchQty(population_count)		# number of matches to make per iteration
 	age_gap = unit.values.MatchGap()					# age gap between matched units
-	max_subunits = unit.values.MatchSubUnits()				# offspring generated from match
+	max_subunits = unit.values.MatchSubUnits(population_count)  		# offspring generated from match
 	subunit_gap = unit.values.MatchSubUnitGap()				# minimum interations between subunit creation
 	minimum_age = unit.values.MatchMinimumAge()
 
